@@ -33,10 +33,11 @@ export type Staff = {
     user?: User; // Para quando carregarmos o relacionamento
 };
 
-
 // Tipos padrão do Breeze/Inertia
 // Nós dizemos que 'auth.user' agora é o nosso tipo 'User'
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>,
+> = T & {
     auth: {
         user: User;
     };
@@ -44,5 +45,5 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     flash: {
         success?: string;
         error?: string;
-    }
+    };
 };

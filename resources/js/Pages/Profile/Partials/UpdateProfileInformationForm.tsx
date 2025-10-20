@@ -2,6 +2,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import { User } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -15,12 +16,17 @@ export default function UpdateProfileInformation({
     status?: string;
     className?: string;
 }) {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user as User;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
-            name: user.name,
-            email: user.email,
+        useForm<{
+            first_name: string;
+            last_name: string;
+            email: string;
+        }>({
+            first_name: user.first_name ?? '',
+            last_name: user.last_name ?? '',
+            email: user.email ?? '',
         });
 
     const submit: FormEventHandler = (e) => {
@@ -43,19 +49,34 @@ export default function UpdateProfileInformation({
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="first_name" value="First name" />
 
                     <TextInput
-                        id="name"
+                        id="first_name"
                         className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        value={data.first_name}
+                        onChange={(e) => setData('first_name', e.target.value)}
                         required
                         isFocused
-                        autoComplete="name"
+                        autoComplete="given-name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    <InputError className="mt-2" message={errors.first_name} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="last_name" value="Last name" />
+
+                    <TextInput
+                        id="last_name"
+                        className="mt-1 block w-full"
+                        value={data.last_name}
+                        onChange={(e) => setData('last_name', e.target.value)}
+                        required
+                        autoComplete="family-name"
+                    />
+
+                    <InputError className="mt-2" message={errors.last_name} />
                 </div>
 
                 <div>
